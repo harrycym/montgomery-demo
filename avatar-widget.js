@@ -128,7 +128,6 @@
 
   // ── STATE ────────────────────────────────────────────────────────────
   var state = {
-    apiKey: '',
     logoUrl: '',
     currentStyle: 'cartoon',
     uploadedBase64: null,
@@ -146,11 +145,7 @@
   window.AvatarWidget = {
     init: function(opts) {
       if (!opts || !opts.target) { console.error('AvatarWidget: target is required'); return; }
-      if (!opts.apiKey) { console.error('AvatarWidget: apiKey is required'); return; }
 
-      state.apiKey = opts.apiKey;
-      // Persist key so user doesn't have to re-enter
-      try { localStorage.setItem('GEMINI_API_KEY', opts.apiKey); } catch (e) {}
       state.logoUrl = opts.logoUrl || '';
 
       // Inject CSS
@@ -290,12 +285,9 @@
       }
     };
 
-    fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent', {
+    fetch('/api/generate', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': state.apiKey
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     })
     .then(function(res) {

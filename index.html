@@ -903,11 +903,7 @@ body{
 
 <script src="avatar-widget.js"></script>
 <script>
-  AvatarWidget.init({
-    target: '#avatar-mount',
-    apiKey: localStorage.getItem('GEMINI_API_KEY') || prompt('Enter your Gemini API key:'),
-    logoUrl: 'logo-footer.png'
-  });
+  AvatarWidget.init({ target: '#avatar-mount', logoUrl: 'logo-footer.png' });
 </script>
 
 <!-- ═══ INFINITE EQUATION ═══ -->
