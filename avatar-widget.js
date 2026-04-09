@@ -460,12 +460,31 @@
     if (!state.downloadDataUrl && !state.generatedBase64) return;
 
     var dataUrl = state.downloadDataUrl || ('data:' + (state.generatedMime || 'image/png') + ';base64,' + state.generatedBase64);
+    var filename = 'montgomery-' + state.currentStyle + '-avatar.png';
+
+    // Convert data URL to blob
+    var byteStr = atob(dataUrl.split(',')[1]);
+    var mimeStr = dataUrl.split(',')[0].split(':')[1].split(';')[0];
+    var arr = new Uint8Array(byteStr.length);
+    for (var i = 0; i < byteStr.length; i++) arr[i] = byteStr.charCodeAt(i);
+    var blob = new Blob([arr], { type: mimeStr });
+    var file = new File([blob], filename, { type: mimeStr });
+
+    // iOS Safari: use Web Share API → native share sheet → Save to Photos
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file] }).catch(function() {});
+      return;
+    }
+
+    // Desktop / Android: normal download
+    var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
-    a.href = dataUrl;
-    a.download = 'montgomery-' + state.currentStyle + '-avatar.png';
+    a.href = url;
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
 })();
