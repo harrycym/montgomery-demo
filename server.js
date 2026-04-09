@@ -36,6 +36,6 @@ app.post('/api/generate', function(req, res) {
   });
 });
 
-app.listen(PORT, function() {
+app.listen(PORT, '0.0.0.0', function() {
   console.log('Montgomery Demo running at http://localhost:' + PORT);
 });
