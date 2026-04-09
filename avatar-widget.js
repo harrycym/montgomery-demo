@@ -149,6 +149,8 @@
       if (!opts.apiKey) { console.error('AvatarWidget: apiKey is required'); return; }
 
       state.apiKey = opts.apiKey;
+      // Persist key so user doesn't have to re-enter
+      try { localStorage.setItem('GEMINI_API_KEY', opts.apiKey); } catch (e) {}
       state.logoUrl = opts.logoUrl || '';
 
       // Inject CSS

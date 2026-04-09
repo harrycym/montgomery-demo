@@ -905,7 +905,7 @@ body{
 <script>
   AvatarWidget.init({
     target: '#avatar-mount',
-    apiKey: 'AIzaSyALesJ0tEaA4Z5_ujX8ogUsoGdM1JpU_K4',
+    apiKey: localStorage.getItem('GEMINI_API_KEY') || prompt('Enter your Gemini API key:'),
     logoUrl: 'logo-footer.png'
   });
 </script>
