@@ -224,9 +224,8 @@
         var ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, w, h);
 
-        // Always compress to JPEG to stay under Vercel's body limit
-        state.uploadedBase64 = canvas.toDataURL('image/jpeg', 0.7).split(',')[1];
-        state.uploadedMimeType = 'image/jpeg';
+        state.uploadedBase64 = canvas.toDataURL(file.type || 'image/jpeg').split(',')[1];
+        state.uploadedMimeType = file.type || 'image/jpeg';
 
         // Show preview
         var preview = document.getElementById('aw-preview');
