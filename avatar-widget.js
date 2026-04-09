@@ -212,7 +212,7 @@
       var img = new Image();
       img.onload = function() {
         var canvas = document.getElementById('aw-canvas');
-        var max = 1024;
+        var max = 512;
         var w = img.width, h = img.height;
         if (w > max || h > max) {
           var ratio = Math.min(max / w, max / h);
@@ -224,8 +224,9 @@
         var ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, w, h);
 
-        state.uploadedBase64 = canvas.toDataURL(file.type || 'image/jpeg').split(',')[1];
-        state.uploadedMimeType = file.type || 'image/jpeg';
+        // Always compress to JPEG to stay under Vercel's body limit
+        state.uploadedBase64 = canvas.toDataURL('image/jpeg', 0.7).split(',')[1];
+        state.uploadedMimeType = 'image/jpeg';
 
         // Show preview
         var preview = document.getElementById('aw-preview');
