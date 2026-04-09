@@ -212,7 +212,7 @@
       var img = new Image();
       img.onload = function() {
         var canvas = document.getElementById('aw-canvas');
-        var max = 512;
+        var max = 1024;
         var w = img.width, h = img.height;
         if (w > max || h > max) {
           var ratio = Math.min(max / w, max / h);
@@ -292,12 +292,16 @@
       body: JSON.stringify(body)
     })
     .then(function(res) {
-      if (!res.ok) {
-        return res.json().then(function(err) {
-          throw new Error(err.error && err.error.message || 'API error ' + res.status);
-        });
-      }
-      return res.json();
+      return res.text().then(function(text) {
+        var data;
+        try { data = JSON.parse(text); } catch (e) {
+          throw new Error('Server error: ' + text.substring(0, 200));
+        }
+        if (!res.ok) {
+          throw new Error(data.error && (typeof data.error === 'string' ? data.error : data.error.message) || 'API error ' + res.status);
+        }
+        return data;
+      });
     })
     .then(function(data) {
       var parts = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts;
